@@ -31,8 +31,8 @@ const Sidebar = () => {
         </h2>
         <nav className="flex flex-col text-center p-4 text-gray-800">
             <Link to="/" className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Dashboard</Link>
-            <Link to="/listeplannings" className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Plannings</Link>
-            <Link to='/listeutilisateurs' className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Professeurs</Link>
+            <Link to="/listeplannings" className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Plannings</Link>
+            <Link to='/listeutilisateurs' className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Enseignants</Link>
             <Link to='/listesalles' className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Salles</Link>
             <button onClick={handleClick}  className="text-gray-200 py-4 fixed bottom-6 w-36 hover:bg-gray-700 rounded-md">Log out</button>
         </nav>
@@ -61,8 +61,8 @@ const Sidebar = () => {
         </h2>
         <nav className="flex flex-col text-center p-4 text-gray-800">
             <Link to="/" className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Dashboard</Link>
-            <Link to="/listeplannings" className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Plannings</Link>
-            <Link to='/listeutilisateurs' className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Professeurs</Link>
+            <Link to="/listeplannings" className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Plannings</Link>
+            <Link to='/listeutilisateurs' className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Enseignants</Link>
             <Link to='/listesalles' className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Salles</Link>
             <button onClick={handleClick}  className="text-gray-200 py-4 fixed bottom-6 w-36 hover:bg-gray-700 rounded-md">Log out</button>
         </nav>

@@ -5,6 +5,7 @@ import Sidebar from '../components/Sidebar'
 import axios from 'axios'
 import  useAuthContext  from '../hooks/useAuthContext';
 import Filter from '/assets/filter.png'
+import Spinner from "../components/Spinner";
 
 function ListeSalles() {
   const [salles, setSalles] = useState([])
@@ -32,7 +33,7 @@ function ListeSalles() {
   const numero = salles.map((salle) => salle.num)
   const type = salles.map((salle) => salle.type) 
   const batiment = salles.map((salle) => salle.batiment)
-
+  const capacites = salles.map((salle) => salle.capacite)
   return (
     <div className="text-white flex flex-col min-h-screen bg-gray-900">
       <Navbar />
@@ -49,19 +50,20 @@ function ListeSalles() {
           <img src={Filter} alt="" />
         </button>
       </div>
-      <div className='rounded-xl  mt-8 shadow  mx-auto  lg:col-span-8  md:w-1/2 md:mt-4 justify-center '>
+      <div className='rounded-xl font-body  mt-8 mb-8 shadow  mx-auto  lg:col-span-8  md:w-1/2 md:mt-4 justify-center '>
         <div className="w-full  overflow-x-auto rounded-lg">
-          <div className="flex  flex-wrap justify-center items-center align-middle inline-block min-w-full">
+          <div className="flex  flex-wrap justify-center items-center align-middle min-w-full">
             <table className="min-w-full ">
                 <thead>
                     <tr>
                         <th className="px-6 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Numéro</th>
-                        <th className="px-18 py-3 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Type</th>
-                        <th className="px-6 py-3 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider ">Batiment</th>
+                        <th className="px-18 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Type</th>
+                        <th className="px-6 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Batiment</th>
+                        <th className="px-6 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider ">Capacité</th>
                     </tr>
                 </thead>
                 {loading ? (
-                    <p>Loading...</p>
+                    <Spinner />
                 ) : (
                   <tbody className="bg-indigo-900 divide-y divide-gray-200">
                   <tr>
@@ -82,6 +84,13 @@ function ListeSalles() {
                     <td className="px-6 py-4 whitespace-no-wrap ">
                         <ul className="list-inside text-white">
                         {batiment.map((name) => (
+                            <li key={name} className='border-b border-blue-gray-100 bg-blue-gray-50 p-4 hover:text-gray-400 font-semibold'>{name}</li>
+                        ))}
+                        </ul>
+                    </td>
+                    <td className="px-6 py-4 whitespace-no-wrap ">
+                        <ul className="list-inside text-white">
+                        {capacites.map((name) => (
                             <li key={name} className='border-b border-blue-gray-100 bg-blue-gray-50 p-4 hover:text-gray-400 font-semibold'>{name}</li>
                         ))}
                         </ul>

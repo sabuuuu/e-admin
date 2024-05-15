@@ -39,7 +39,7 @@ function AjouterExam() {
           Nous nous efforçons de créer une expérience conviviale et efficace pour la programmation des examens. Essayez notre application dès aujourd'hui ! Si vous avez des questions ou des commentaires, n'hésitez pas à utiliser notre formulaire de contact. Votre contribution est précieuse pour nous permettre d'améliorer continuellement cette plateforme.
           </p>
         </div>
-            <form className='w-1/2 px-4 mt-4 rounded-xl bg-white border border-gray-200 shadow dark:bg-gray-800 dark:border-gray-700 px-8 pt-6 pb-8'>
+            <form className='w-1/2 mt-4 rounded-xl bg-white border border-gray-200 shadow dark:bg-gray-800 dark:border-gray-700 px-8 pt-6 pb-8'>
               <div className='mb-4'>
                 <label className='block text-gray-300 text-sm font-bold mb-2' htmlFor='email'>
                   E-mail

@@ -10,14 +10,14 @@ export const useSignup = () => {
   const { enqueueSnackbar } = useSnackbar();
 
 
-  const signup = async (name, surame, email, password) => {
+  const signup = async (email, password ,name, surname) => {
     setIsLoading(true)
     setError(null)
 
     const response = await fetch('https://eplan-backend.onrender.com/signup', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({name, surame, email, password })
+      body: JSON.stringify({email, password ,name, surname})
     })
     const json = await response.json()
 

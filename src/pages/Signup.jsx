@@ -9,13 +9,13 @@ const Signup = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-  const [surame, setSurame] = useState('')
+  const [surname, setSurname] = useState('')
   const {signup, error, isLoading} = useSignup()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    await signup(name, surame, email, password)
+    await signup(email, password ,name, surname)
   }
 
   return (
@@ -73,8 +73,8 @@ const Signup = () => {
                 <input
                   className="w-full bg-gray-600 font-body bg-opacity-20 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                   type="text"
-                  value={surame}
-                  onChange={(e) => setSurame(e.target.value)}
+                  value={surname}
+                  onChange={(e) => setSurname(e.target.value)}
                 />
               </div>
             </div>

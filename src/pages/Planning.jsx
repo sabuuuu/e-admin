@@ -52,6 +52,7 @@ function Planning() {
   const [annee,setAnnee] = useState(  { value: "L1", label: "L1" },);
   const [semestre,setSemestre] = useState({ value: "1", label: "1" });
   const [type,setType] = useState({ value: "Normal", label: "Normal" });
+  const[error,setError] = useState(null);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
@@ -75,7 +76,7 @@ function Planning() {
   const getProfs =  () => {
     try {
       axios
-        .get('http://localhost:5555/profs/all', {
+        .get('https://eplan-backend.onrender.com/profs/all', {
           headers: {
             'Authorization': `Bearer ${user.token}`,
           }
@@ -94,7 +95,7 @@ function Planning() {
   const getSalles =  () => {
     try {
       axios.
-        get('http://localhost:5555/salles/all', { 
+        get('https://eplan-backend.onrender.com/salles/all', { 
           headers: { 'Authorization': `Bearer ${user.token}` } })
         .then((response) => {
           setListeS(response.data.data);
@@ -132,6 +133,11 @@ function Planning() {
   };
   const getPlanning =  () => {
     try {
+      if(names.length === 0){
+        setError('Veuillez ajouter au moins un examen 📚');
+        return;
+      }
+      setError(null);
       const profs = liste;
       const salles = listeS;
       const examNames = names;
@@ -141,13 +147,12 @@ function Planning() {
         salles: salles
     };
       axios
-        .post('http://localhost:5555/plannings/generate', requestData,{
+        .post('https://eplan-backend.onrender.com/plannings/generate', requestData,{
           headers: {
             'Authorization': `Bearer ${user.token}`,            
           }
         })
         .then((response) => {
-          console.log(response.data.data);
           setExams(response.data.data);
         })
         .catch((error) => {
@@ -181,6 +186,7 @@ function Planning() {
 
   const handleSaveExam = (exam) => {
     const data = {
+      _id : exam._id,
       name : exam.name,
       date : exam.date,
       time : exam.time,
@@ -188,7 +194,7 @@ function Planning() {
       salle : exam.salle._id
     };
     axios
-    .post('http://localhost:5555/exams', data ,{
+    .post('https://eplan-backend.onrender.com/exams', data ,{
       headers: {
         'Authorization': `Bearer ${user.token}`,
       }
@@ -215,7 +221,7 @@ function Planning() {
       type : type.value
     };
     axios
-    .post('http://localhost:5555/plannings', data ,{
+    .post('https://eplan-backend.onrender.com/plannings', data ,{
       headers: {
         'Authorization': `Bearer ${user.token}`,
       }
@@ -364,6 +370,7 @@ function Planning() {
               ))}
             </ul>
           <button className='w-full mt-3 text-white font-body font-semibold bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg' onClick={getPlanning}>Générer</button>
+            {error && <div className='error-message text-red-700 font-body text-center mt-2'>{error}</div>}
           {exams.length > 0 ? (
               <div className="overflow-x-auto mt-3 font-body">
                 <table className="min-w-full rounded-lg overflow-hidden shadow-lg">

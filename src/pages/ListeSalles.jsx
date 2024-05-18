@@ -11,18 +11,22 @@ function ListeSalles() {
   const [salles, setSalles] = useState([])
   const [loading, setLoading] = useState(false);
   const { user } = useAuthContext();
+  const [filters, setFilters] = useState({
+    type: '',
+    capacite: '',
+  });
+  const [salleFiltered, setSalleFiltered] = useState([]);
 
   useEffect(() => {
     setLoading(true);
     axios
-      .get('http://localhost:5555/salles/all', {
+      .get('https://eplan-backend.onrender.com/salles/all', {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
       })
       .then((response) => {
         setSalles(response.data.data);
-        console.log(response.data.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -30,10 +34,24 @@ function ListeSalles() {
         setLoading(false);
       });
   }, []);
-  const numero = salles.map((salle) => salle.num)
-  const type = salles.map((salle) => salle.type) 
-  const batiment = salles.map((salle) => salle.batiment)
-  const capacites = salles.map((salle) => salle.capacite)
+
+  const handleHide = () => {
+    document.getElementById('filter').classList.toggle('hidden');
+  }
+
+  const filterSalle = (salles, filters) => {
+    return salles.filter((salle) => {
+      return (
+        (!filters.type || salle.type === filters.type) &&
+        (!filters.capacite || salle.capacite === parseInt(filters.capacite))  
+      );
+    });
+  };
+  
+
+  const handleFilter = () => {
+    setSalleFiltered(filterSalle(salles, filters));
+  };
   return (
     <div className="text-white flex flex-col min-h-screen bg-gray-900">
       <Navbar />
@@ -43,60 +61,75 @@ function ListeSalles() {
         <div></div>
         <div></div>
         <h1 className='sm:text-2xl text-2xl font-bold font-body text-white'>
-          Liste des salles 
+          Liste des Locaux 🏢
         </h1>
         <div></div>
-        <button  className='py-2 text-white font-body font-semibold  border-0  px-8 focus:outline-none hover:bg-indigo-600 rounded '>
-          <img src={Filter} alt="" />
-        </button>
+        <div>
+          <button onClick={handleHide} className='py-2 text-white font-body font-semibold  border-0  px-8 focus:outline-none hover:bg-indigo-600 rounded '>
+            <img src={Filter} className='w-8 h-8' />
+          </button>
+        </div>
       </div>
-      <div className='rounded-xl font-body  mt-8 mb-8 shadow  mx-auto  lg:col-span-8  md:w-1/2 md:mt-4 justify-center '>
-        <div className="w-full  overflow-x-auto rounded-lg">
-          <div className="flex  flex-wrap justify-center items-center align-middle min-w-full">
-            <table className="min-w-full ">
+          <div id="filter" className='font-body rounded-xl flex my-8 shadow  mx-auto  lg:col-span-8 lg:w-3/4 lg:mr-16 md:w-1/2 md:mt-4 justify-center '>
+              <div className='mx-4'>
+                <label className='block mb-1 text-sm font-body text-gray-400'>Type du local</label>
+                <select onChange={(event) => setFilters({ ...filters, type: event.target.value })} className='w-full border border-none rounded-md px-4 py-2 mb-2 bg-gray-800 font-body'>
+                  <option value="">Select...</option> 
+                  <option value="Salle TD">Salle TD</option>
+                  <option value="Amphi">Amphi</option>
+                </select>
+              </div>
+              <div className='mx-4'>
+                <label className='block mb-1 text-sm font-body text-gray-400'>Capacité</label>
+                <select onChange={(event) => setFilters({ ...filters, capacite: event.target.value })} className='w-full border border-none rounded-md px-4 py-2 mb-2 bg-gray-800 font-body'>
+                  <option value="">Select...</option> 
+                  <option value="32">32</option>
+                  <option value="40">40</option>
+                  <option value="60">60</option>
+                  <option value="80">80</option>
+                  <option value="120">120</option>
+                  <option value="180">180</option>
+                  <option value="220">220</option>
+                  <option value="300">300</option>
+                </select>
+              </div>
+              <div className='mx-4'>
+                <button className='w-full border border-none rounded-md px-8 py-2 mt-5 bg-indigo-800 font-body' onClick={handleFilter}>Filtrer</button>
+              </div>
+          </div>
+          <div className=' mx-auto  lg:col-span-8 lg:w-2/3 lg:mr-32 md:mt-4 w-full md:w-2/3 p-4 flex flex-col items-center justify-center'>
+      <div className="w-full overflow-x-auto rounded-lg">
+            <div className="align-middle inline-block min-w-full">
+                <table className="min-w-full font-body ">
                 <thead>
                     <tr>
-                        <th className="px-6 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Numéro</th>
-                        <th className="px-18 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Type</th>
-                        <th className="px-6 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Batiment</th>
-                        <th className="px-6 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider ">Capacité</th>
+                    <th className="px-4 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Numéro</th>
+                        <th className="px-4 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Type</th>
+                        <th className="px-4 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Batiment</th>
+                        <th className="px-4 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider ">Capacité</th>
                     </tr>
                 </thead>
                 {loading ? (
                     <Spinner />
                 ) : (
                   <tbody className="bg-indigo-900 divide-y divide-gray-200">
-                  <tr>
-                    <td className="px-6 py-4 whitespace-no-wrap ">
-                        <ul className="list-inside text-white text-center">
-                        {numero.map((name) => (
-                            <li key={name} className='border-b border-blue-gray-100 bg-blue-gray-50 p-4 hover:text-gray-400 font-semibold'>{name}</li>
-                        ))}
-                        </ul>
-                    </td>
-                    <td className="px-6 py-2 whitespace-no-wrap ">
-                        <ul className="list-inside text-white">
-                        {type.map((name) => (
-                            <li key={name} className='border-b border-blue-gray-100 bg-blue-gray-50 p-4  hover:text-gray-400 font-semibold'>{name}</li>
-                        ))}
-                        </ul>
-                    </td>
-                    <td className="px-6 py-4 whitespace-no-wrap ">
-                        <ul className="list-inside text-white">
-                        {batiment.map((name) => (
-                            <li key={name} className='border-b border-blue-gray-100 bg-blue-gray-50 p-4 hover:text-gray-400 font-semibold'>{name}</li>
-                        ))}
-                        </ul>
-                    </td>
-                    <td className="px-6 py-4 whitespace-no-wrap ">
-                        <ul className="list-inside text-white">
-                        {capacites.map((name) => (
-                            <li key={name} className='border-b border-blue-gray-100 bg-blue-gray-50 p-4 hover:text-gray-400 font-semibold'>{name}</li>
-                        ))}
-                        </ul>
-                    </td>
-                </tr>
-            </tbody>
+                    {(salleFiltered.length > 0 ? salleFiltered : salles).map((salle) => (
+                        <tr key={salle.id}>
+                           <td className="px-6 py-4 whitespace-no-wrap border-b border-blue-gray-100 bg-blue-gray-50   hover:text-gray-400">
+                              {salle.num}
+                            </td>
+                            <td className="px-6 py-4 whitespace-no-wrap border-b border-blue-gray-100 bg-blue-gray-50   hover:text-gray-400">
+                              {salle.type}
+                            </td>
+                            <td className="px-6 py-4 whitespace-no-wrap border-b border-blue-gray-100 bg-blue-gray-50   hover:text-gray-400">
+                              {salle.batiment}
+                            </td>
+                            <td className="px-6 py-4 whitespace-no-wrap border-b border-blue-gray-100 bg-blue-gray-50   hover:text-gray-400">
+                              {salle.capacite}
+                            </td>
+                        </tr>
+                    ))}
+                 </tbody>
                 )}
             </table>
         </div>

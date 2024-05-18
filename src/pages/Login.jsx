@@ -17,7 +17,7 @@ function Login() {
     }
 
   return (
-    <section className="h-full md:h-full flex flex-col lg:flex-row lg:h-screen text-gray-400 lg:bg-[url('../public/assets/bg.jpg')] bg-[url('../public/assets/6.jpg')] bg-cover body-font">
+    <section className="h-full md:h-full flex flex-col lg:flex-row lg:h-screen text-gray-400 lg:bg-[url('/assets/bg.jpg')] bg-[url('/assets/6.jpg')] bg-cover body-font">
       {/* First div */}
       <div className="flex justify-center items-center lg:w-1/2 m-8">
         <div className="text-center">
@@ -50,7 +50,7 @@ function Login() {
             <a href="/" title="Home Page" class="flex items-center justify-center text-white text-2xl font-bold font-body">
               LOG IN
             </a>
-            <h1 class="mt-6 mb-4 text-xl text-center text-grey-400 font-body title-font mb-5 opacity-96">Connectez-vous a votre compte</h1>
+            <h1 class="mt-6  text-xl text-center text-grey-400 font-body title-font mb-5 opacity-96">Connectez-vous a votre compte</h1>
 
             <form className='pb-1 space-y-4 justify-center items-center mt-6 ' onSubmit={handleSubmit}>
               <div className='block'>
@@ -63,7 +63,7 @@ function Login() {
                 <input  className='w-full font-body bg-gray-600 bg-opacity-20 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out' type='password' value={password} onChange={e => setPassword(e.target.value)} />
               </div>
               <div class="flex items-center">
-                <button className='w-full py-2 mt-3 text-white font-body font-semibold bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg' type='submit' disabled={isLoading}>Connexion</button>
+                <button className='w-full  mt-3 text-white font-body font-semibold bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg' type='submit' disabled={isLoading}>Connexion</button>
               </div>
               
 

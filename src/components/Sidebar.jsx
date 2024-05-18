@@ -10,7 +10,7 @@ const Sidebar = () => {
   const [nav, setNav] = useState(false);
   const { user } = useAuthContext();
   const userEmail = user.email;
-  const backendBaseUrl = 'http://localhost:5555'; 
+  const backendBaseUrl = 'https://eplan-backend.onrender.com'; 
   const {logout} = useLogout();
   const handleClick = () => {
       logout();
@@ -34,7 +34,7 @@ const Sidebar = () => {
             <Link to="/listeplannings" className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Plannings</Link>
             <Link to='/listeutilisateurs' className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Enseignants</Link>
             <Link to='/listesalles' className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Salles</Link>
-            <button onClick={handleClick}  className="text-gray-200 py-4 fixed bottom-6 w-36 hover:bg-gray-700 rounded-md">Log out</button>
+            <button onClick={handleClick}  className="text-gray-200 py-4 fixed bottom-6 w-36 hover:bg-gray-700 rounded-md">Déconnexion</button>
         </nav>
       </div>
     </div>
@@ -64,7 +64,7 @@ const Sidebar = () => {
             <Link to="/listeplannings" className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Plannings</Link>
             <Link to='/listeutilisateurs' className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Enseignants</Link>
             <Link to='/listesalles' className="text-gray-200 py-4 border-b border-gray-300 hover:bg-gray-700 rounded-t-md">Liste Salles</Link>
-            <button onClick={handleClick}  className="text-gray-200 py-4 fixed bottom-6 w-36 hover:bg-gray-700 rounded-md">Log out</button>
+            <button onClick={handleClick}  className="text-gray-200 py-4 fixed bottom-6 w-36 hover:bg-gray-700 rounded-md">Déconnexion</button>
         </nav>
     </div>
   </div>

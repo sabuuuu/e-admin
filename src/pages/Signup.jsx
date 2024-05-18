@@ -19,7 +19,7 @@ const Signup = () => {
   }
 
   return (
-    <section className="h-full md:h-full flex flex-col lg:flex-row lg:h-screen text-gray-400 lg:bg-[url('../public/assets/5.jpg')] bg-[url('../public/assets/55.jpg')] bg-cover body-font">
+    <section className="h-full md:h-full flex flex-col lg:flex-row lg:h-screen text-gray-400 lg:bg-[url('/assets/bg.jpg')] bg-[url('/assets/6.jpg')] bg-cover body-font">
       {/* First div */}
       <div className="flex justify-center items-center lg:w-1/2 m-8">
         <div className="text-center">
@@ -88,7 +88,7 @@ const Signup = () => {
                 <input  className='w-full font-body bg-gray-600 bg-opacity-20 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out' type='password' value={password} onChange={e => setPassword(e.target.value)} />
             </div>
             <div class="flex items-center">
-              <button className='w-full font-body font-semibold py-2 mt-3 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg' disabled={isLoading}>Inscription</button>
+              <button className='w-full font-body font-semibold  mt-3 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg' disabled={isLoading}>Inscription</button>
             </div>
             {error && <div className="text-sm mt-3 text-red-700  text-center font-body">{error}</div>}
         </form> 

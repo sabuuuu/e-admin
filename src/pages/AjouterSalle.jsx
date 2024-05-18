@@ -11,7 +11,8 @@ function AjouterSalle() {
   const [num , setNum] = useState("");
   const [type , setType] = useState({ value: "Salle TD" , label: "Salle TD"});
   const [batiment , setBatiment] = useState("");
-  const [capacite , setCapacite] = useState();
+  const [capacite , setCapacite] = useState(0);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   
@@ -21,6 +22,16 @@ function AjouterSalle() {
     setType(selectedOption);
   }
   const handleSaveSalle = () => {
+    if (!num || !type || !batiment || !capacite) {
+      setError('Veuillez remplir tous les champs avant de sauvegarder ✍🏽');
+      return;
+    }
+    setError(null);
+    if(num < 0 || capacite < 0){
+      setError('Veuillez entrer des valeurs positives');
+      return;
+    }
+    setError(null);
     const data = {
       num,
       type : type.value,
@@ -29,7 +40,7 @@ function AjouterSalle() {
     };
     console.log(data);
     axios
-    .post('http://localhost:5555/salles', data ,{
+    .post('https://eplan-backend.onrender.com/salles', data ,{
       headers: {
         'Authorization': `Bearer ${user.token}`,
       }
@@ -68,7 +79,7 @@ function AjouterSalle() {
     <div className='flex min-h-screen flex-col text-gray-400 bg-gray-900 body-font'>
       <Navbar />
       <Sidebar />
-      <div className='flex flex-col text-center w-full mb-8 mt-8'>
+      <div className='flex flex-col text-center w-full mb-6 mt-6'>
             <h1 className='sm:text-2xl text-2xl font-bold font-body text-white'>
               Ajouter une Salle d'examination
             </h1>
@@ -114,6 +125,7 @@ function AjouterSalle() {
             <label className=' text-sm font-body text-gray-400'>Capacité </label>
             <input
               type='number'
+              min={0}
               value={capacite}
               onChange={(e) => setCapacite(e.target.value)}
               className='w-full font-body bg-gray-600 bg-opacity-20 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out'
@@ -122,6 +134,7 @@ function AjouterSalle() {
           <button className='w-full mt-3 text-white font-body font-semibold bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg' onClick={handleSaveSalle}>
           Ajouter
         </button>
+        {error && <p className='error-message text-red-700 text-center text-lg mt-4'>{error}</p>}
         </div>
     </div>
   )

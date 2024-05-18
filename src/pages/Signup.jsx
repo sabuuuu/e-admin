@@ -62,8 +62,8 @@ const Signup = () => {
                 <label className="block mb-1 text-sm font-medium font-body text-gray-400">Nom : </label>
                 <input
                   className="w-full bg-gray-600 font-body bg-opacity-20 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                  type="email"
-                  value={email}
+                  type="text"
+                  value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
@@ -72,8 +72,8 @@ const Signup = () => {
                 <label className="block mb-1 text-sm font-medium font-body text-gray-400">Prénom : </label>
                 <input
                   className="w-full bg-gray-600 font-body bg-opacity-20 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                  type="email"
-                  value={email}
+                  type="text"
+                  value={surame}
                   onChange={(e) => setSurame(e.target.value)}
                 />
               </div>

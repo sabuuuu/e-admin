@@ -5,6 +5,10 @@ import axios from 'axios'
 import  useAuthContext  from '../hooks/useAuthContext';
 import Filter from '/assets/filter.png'
 import Spinner from '../components/Spinner'
+import Supprimer from '/assets/sup.png'
+import Modifier from '/assets/mod.png'
+import { Link } from 'react-router-dom';
+
 
 function ListePlanning() {
   const [plannings, setPlannings] = useState([])
@@ -51,6 +55,25 @@ function ListePlanning() {
     });
   };
   
+  const handleDelete = (pID) => {
+    setLoading(true);
+    axios
+      .delete(`https://eplan-backend.onrender.com/plannings/${pID}` , {
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      })
+      .then(() => {
+        setLoading(false);
+        enqueueSnackbar('Planning supprimé avec succés', { variant: 'success' });
+        navigate('/listeplannings');
+      })
+      .catch((error) => {
+        setLoading(false);
+        enqueueSnackbar('Error', { variant: 'error' });
+        console.log(error);
+      });
+  };
 
   const handleFilter = () => {
     setPlanningsFiltered(filterSchedules(plannings, filters))
@@ -134,7 +157,7 @@ function ListePlanning() {
                         <th className="px-6 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Année</th>
                         <th className="px-6 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Semestre</th>
                         <th className="px-6 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Type</th>
-                        <th className="px-6 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider  border-black">Examens</th>
+                        <th className="px-6 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider  border-black">Actions</th>
                     </tr>
                 </thead>
                 {loading ? (
@@ -161,8 +184,9 @@ function ListePlanning() {
                             <td className="px-6 py-5 whitespace-no-wrap border-b border-blue-gray-100 bg-blue-gray-50   hover:text-gray-400">
                               {planning.type}
                             </td>
-                            <td className="px-6  whitespace-no-wrap border-b border-blue-gray-100 bg-blue-gray-50   hover:text-gray-400">
-                              <button className=' text-white font-body px-4 py-4 font-semibold  border-0  hover:bg-indigo-600 rounded'>voir modules</button>
+                            <td className="flex px-2 py-4 whitespace-no-wrap border-blue-gray-100 bg-blue-gray-50   hover:text-gray-400">
+                              <Link to={`/editplanning/${planning._id}`} className='border-none cursor-pointer  text-white font-body px-2 py-1 font-semibold  border-0  hover:bg-indigo-600 rounded'><img src={Modifier} alt="" /></Link>
+                              <Link onClick={() => handleDelete(planning._id)} className='border-none cursor-pointer  text-white font-body px-2 py-1 font-semibold  border-0  hover:bg-indigo-600 rounded'><img src={Supprimer} alt="" /></Link>
                             </td>
                         </tr>
                     ))}

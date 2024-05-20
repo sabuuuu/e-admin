@@ -10,6 +10,9 @@ import ListePlanning from './pages/ListePlanning'
 import ListeSalles from './pages/ListeSalles'
 import ListeUtil from './pages/ListeUtil'
 import AjouterExam from './pages/AjouterExam'
+import EditPlanning from './pages/EditPlanning'
+import EditSalle from './pages/EditSalle'
+import EditProf from './pages/EditProf'
 
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -28,6 +31,9 @@ function App() {
       <Route path='/listesalles' element={user ? <ListeSalles /> : <Navigate to='/login' />} />
       <Route path='/listeutilisateurs' element={user ? <ListeUtil /> : <Navigate to='/login' />} />
       <Route path='/about' element={user ? <AjouterExam /> : <Navigate to='/login' />} />
+      <Route path='/editplanning/:id' element={user ? <EditPlanning /> : <Navigate to='/login' />} />
+      <Route path='/editsalle/:id' element={user ? <EditSalle /> : <Navigate to='/login' />} />
+      <Route path='/editprof/:id' element={user ? <EditProf /> : <Navigate to='/login' />} />
 
       <Route path='/login' element={!user ? <Login /> : <Navigate to='/' />} />
       <Route path='/signup' element={!user ? <Signup /> : <Navigate to='/' />} />

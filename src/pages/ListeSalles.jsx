@@ -6,6 +6,10 @@ import axios from 'axios'
 import  useAuthContext  from '../hooks/useAuthContext';
 import Filter from '/assets/filter.png'
 import Spinner from "../components/Spinner";
+import Supprimer from '/assets/sup.png'
+import Modifier from '/assets/mod.png'
+import { Link } from 'react-router-dom';
+
 
 function ListeSalles() {
   const [salles, setSalles] = useState([])
@@ -52,6 +56,28 @@ function ListeSalles() {
   const handleFilter = () => {
     setSalleFiltered(filterSalle(salles, filters));
   };
+
+  const handleDelete = (pID) => {
+    setLoading(true);
+    axios
+      .delete(`https://eplan-backend.onrender.com/salles/${pID}` , {
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      })
+      .then(() => {
+        setLoading(false);
+        enqueueSnackbar('Local supprimé avec succés', { variant: 'success' });
+        navigate('/listesalles');
+      })
+      .catch((error) => {
+        setLoading(false);
+        // alert('An error happened. Please Chack console');
+        enqueueSnackbar('Error', { variant: 'error' });
+        console.log(error);
+      });
+  };
+
   return (
     <div className="text-white flex flex-col min-h-screen bg-gray-900">
       <Navbar />
@@ -106,7 +132,8 @@ function ListeSalles() {
                     <th className="px-4 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Numéro</th>
                         <th className="px-4 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Type</th>
                         <th className="px-4 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Batiment</th>
-                        <th className="px-4 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider ">Capacité</th>
+                        <th className="px-4 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider border-r border-black">Capacité</th>
+                        <th className="px-2 py-5 bg-indigo-950 text-center text-xs leading-4 font-medium text-gray-200 uppercase tracking-wider ">Actions</th>
                     </tr>
                 </thead>
                 {loading ? (
@@ -126,6 +153,10 @@ function ListeSalles() {
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap border-b border-blue-gray-100 bg-blue-gray-50   hover:text-gray-400">
                               {salle.capacite}
+                            </td>
+                            <td className="flex px-2 py-4 whitespace-no-wrap border-blue-gray-100 bg-blue-gray-50   hover:text-gray-400">
+                              <Link to={`/editsalle/${salle._id}`} className='border-none cursor-pointer  text-white font-body px-2 py-1 font-semibold  border-0  hover:bg-indigo-600 rounded'><img src={Modifier} alt="" /></Link>
+                              <Link onClick={() => handleDelete(salle._id)} className='border-none cursor-pointer  text-white font-body px-2 py-1 font-semibold  border-0  hover:bg-indigo-600 rounded'><img src={Supprimer} alt="" /></Link>
                             </td>
                         </tr>
                     ))}

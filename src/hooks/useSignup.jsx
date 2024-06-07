@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useAuthContext from "./useAuthContext";
 import { useSnackbar } from 'notistack';
-
+import config from "../config/Config";
 
 export const useSignup = () => {
   const [error, setError] = useState(null)
@@ -14,7 +14,7 @@ export const useSignup = () => {
     setIsLoading(true)
     setError(null)
 
-    const response = await fetch('https://eplan-backend.onrender.com/signup', {
+    const response = await fetch(`${config.apiBaseUrl}/signup`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({email, password ,name, surname})

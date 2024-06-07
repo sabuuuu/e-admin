@@ -1,4 +1,4 @@
-import React ,{ useState ,useEffect} from 'react'
+import React ,{ useState ,useEffect ,useContext} from 'react'
 import { Navbar } from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import axios from 'axios';
@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import  useAuthContext  from '../hooks/useAuthContext';
 import Select from 'react-select';
-
+import { ThemeContext } from '../context/ThemeContext'
+import config from '../config/Config';
 const faculteOptions = [
   { value: "Sciences exactes", label: "Sciences exactes" },
   { value: "Technologie", label: "Technologie" },
@@ -45,6 +46,7 @@ const anneeOptions = [
 ];
 
 function Planning() {
+  const { theme } = useContext(ThemeContext);
   const [exams,setExams] = useState([]);
   const [faculte,setFaculte] = useState({value: "Sciences exactes", label: "Sciences exactes"});
   const [departement,setDepartement] = useState({value: "Informatique", label: "Informatique" });
@@ -76,7 +78,7 @@ function Planning() {
   const getProfs =  () => {
     try {
       axios
-        .get('https://eplan-backend.onrender.com/profs/all', {
+        .get(`${config.apiBaseUrl}/profs/all`, {
           headers: {
             'Authorization': `Bearer ${user.token}`,
           }
@@ -95,7 +97,7 @@ function Planning() {
   const getSalles =  () => {
     try {
       axios.
-        get('https://eplan-backend.onrender.com/salles/all', { 
+        get(`${config.apiBaseUrl}/salles/all`, { 
           headers: { 'Authorization': `Bearer ${user.token}` } })
         .then((response) => {
           setListeS(response.data.data);
@@ -147,7 +149,7 @@ function Planning() {
         salles: salles
     };
       axios
-        .post('https://eplan-backend.onrender.com/plannings/generate', requestData,{
+        .post(`${config.apiBaseUrl}/plannings/generate`, requestData,{
           headers: {
             'Authorization': `Bearer ${user.token}`,            
           }
@@ -166,21 +168,21 @@ function Planning() {
   const customStyles = {
     menu: (provided, state) => ({
       ...provided,
-      backgroundColor: '#374151',
+      backgroundColor: theme === 'dark' ? '#374151' : 'white',
       borderRadius: '4px',
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? '#334155' : '#374151',
-      color: state.isSelected ? '#e5e7eb' : '#f3f4f6',
+      backgroundColor: state.isSelected ?theme === 'light' ? '#D1CECE' : '#334155' : theme === 'light' ? '#FFFFFF' : '#374151',
+      color: state.isSelected ? theme === 'light' ? 'black' :'#e5e7eb' : theme === 'light' ? '' : '#f3f4f6',
       '&:hover': {
-        backgroundColor: state.isSelected ? '#334155' : '#6b7280',
-        color: state.isSelected ? '#e5e7eb' : '#e5e7eb',
+        backgroundColor: state.isSelected ? theme === 'light' ? '#e5e7eb' : '#374151' : theme === 'light' ? '#e5e7eb' : '#6b7280',
+        color: state.isSelected ? theme === 'light' ? '#374151' : '#e5e7eb' : theme === 'light' ? '#374151' : '#e5e7eb',
       },
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: '#e5e7eb',  
+      color: theme === 'dark' ? '#e5e7eb' : '#000000',
     }),
   };
 
@@ -194,7 +196,7 @@ function Planning() {
       salle : exam.salle._id
     };
     axios
-    .post('https://eplan-backend.onrender.com/exams', data ,{
+    .post(`${config.apiBaseUrl}/exams`, data ,{
       headers: {
         'Authorization': `Bearer ${user.token}`,
       }
@@ -221,7 +223,7 @@ function Planning() {
       type : type.value
     };
     axios
-    .post('https://eplan-backend.onrender.com/plannings', data ,{
+    .post(`${config.apiBaseUrl}/plannings`, data ,{
       headers: {
         'Authorization': `Bearer ${user.token}`,
       }
@@ -236,133 +238,127 @@ function Planning() {
   };
 
   return (
-    <div className='flex min-h-screen flex-col text-gray-400 bg-gray-900 body-font'>
+    <div className={`flex min-h-screen flex-col body-font ${theme === 'dark' ? 'text-gray-200 bg-gray-900' : 'bg-gray-200 text-gray-800'}`}>
       <Navbar />
       <Sidebar />
       <div className='flex items-center justify-around px-8 py-4'>
-        <h1 className='sm:text-2xl text-2xl font-bold font-body text-white'>
+        <h1 className='sm:text-2xl text-2xl font-bold font-body'>
           Ajouter un Planning d'examen
         </h1>
       </div>
 
-      <div className='rounded-xl mb-8 border border-gray-200 shadow  mx-auto  lg:col-span-8 xl:p-6 p-4 md:w-1/2 md:mt-4 justify-center '>
+      <div className={`rounded-xl mb-8 border shadow  mx-auto  lg:col-span-8 xl:p-6 p-4 md:w-1/2 md:mt-4 justify-center ${theme === 'dark' ? 'border-gray-200 ' : 'border-gray-600 '}`}>
         <div className='my-4'>
-            <label className='font-medium font-body text-gray-300'>Faculté :</label>
+            <label className={`font-medium font-body ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Faculté :</label>
             <Select
                 options={faculteOptions}
                 value={faculte}
                 onChange={handleChangeFac}
-                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out"
-                styles={{
+                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-700 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out" styles={{
                   ...customStyles, // Merge custom styles
                   control: (base) => ({
                     ...base,
                     borderColor: 'gray',
                     color: 'white',
-                    backgroundColor: '',
+                    backgroundColor: theme === 'dark' ? '' : '#d1d5db',
                   }),
                 }}/>
           </div>
           <div className='my-4'>
-          <label className='font-medium font-body text-gray-300'>Département :</label>
+<label className={`font-medium font-body ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Département :</label>
             <Select
                 options={specialiteOptions}
                 value={departement}
                 onChange={handleChangeDep}
-                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out"
-                styles={{
+                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-700 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out" styles={{
                   ...customStyles, // Merge custom styles
                   control: (base) => ({
                     ...base,
                     borderColor: 'gray',
                     color: 'white',
-                    backgroundColor: '',
+                    backgroundColor: theme === 'dark' ? '' : '#d1d5db',
                   }),
                 }}/>
           </div>
           <div className='my-4'>
-          <label className='font-medium font-body text-gray-300'>Filiére :</label>
+<label className={`font-medium font-body ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Filiére :</label>
             <Select
                 options={filiereOptions}
                 value={filiere}
                 onChange={handleChangeFil}
-                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out"
-                styles={{
+                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-700 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out" styles={{
                   ...customStyles, // Merge custom styles
                   control: (base) => ({
                     ...base,
                     borderColor: 'gray',
                     color: 'white',
-                    backgroundColor: '',
+                    backgroundColor: theme === 'dark' ? '' : '#d1d5db',
                   }),
                 }}/>
           </div>
           <div className='my-4'>
-          <label className='font-medium font-body text-gray-300'>Année :</label>
+<label className={`font-medium font-body ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Année :</label>
             <Select
                 options={anneeOptions}
                 value={annee}
                 onChange={handleChangeAn}
-                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out"
-                styles={{
+                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-700 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out" styles={{
                   ...customStyles, // Merge custom styles
                   control: (base) => ({
                     ...base,
                     borderColor: 'gray',
                     color: 'white',
-                    backgroundColor: '',
+                    backgroundColor: theme === 'dark' ? '' : '#d1d5db',
                   }),
                 }}/>
           </div>
           <div className='my-4'>
-          <label className='font-medium font-body text-gray-300'>Semestre :</label>
+<label className={`font-medium font-body ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Semestre :</label>
             <Select
                 options={[{ value: "1", label: "1" }, { value: "2", label: "2" }]}
                 value={semestre}
                 onChange={handleChangeSem}
-                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out"
-                styles={{
+                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-700 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out" styles={{
                   ...customStyles, // Merge custom styles
                   control: (base) => ({
                     ...base,
                     borderColor: 'gray',
                     color: 'white',
-                    backgroundColor: '',
+                    backgroundColor: theme === 'dark' ? '' : '#d1d5db',
                   }),
                 }}/>
           </div>
           <div className='my-4'>
-          <label className='font-medium font-body text-gray-300'>Session :</label>
+<label className={`font-medium font-body ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Session :</label>
             <Select
                 options={[{ value: "Normal", label: "Normal" }, { value: "Rattrapage", label: "Rattrapage" },{ value: "Remplacement", label: "Remplacement" }]}
                 value={type}
                 onChange={handleChangeTy}
-                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out"
-                styles={{
+                className="basic-multi-select font-body bg-gray-600 bg-opacity-20  focus:ring-indigo-900 rounded border border-gray-700 focus:border-indigo-500 text-base outline-none text-black leading-8 transition-colors duration-200 ease-in-out" styles={{
                   ...customStyles, // Merge custom styles
                   control: (base) => ({
                     ...base,
                     borderColor: 'gray',
                     color: 'white',
-                    backgroundColor: '',
+                    backgroundColor: theme === 'dark' ? '' : '#d1d5db',
                   }),
                 }}/>
           </div>
           <div className='flex'>
             <div className="mr-4 w-3/4">
-            <label className="block mb-1 text font-medium font-body text-gray-300">Saisir les noms des modules a passer </label>
+            <label className="block mb-1 text font-medium font-body ">Saisir les noms des modules a passer </label>
               <input type="text"
                 value={newName} 
                 onChange={(e) => setNewName(e.target.value)} 
-                className='w-full font-body bg-gray-600 bg-opacity-20 mt-3 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out'/>
+                className={`w-full bg-opacity-20 focus:ring-indigo-900 rounded py-1 px-3 border text-base outline-none leading-8 transition-colors duration-200 ease-in-out font-body ${theme === 'dark' ? 'bg-gray-600 border-gray-600 focus:border-indigo-500 text-white' : 'bg-gray-400 border-gray-600 focus:border-indigo-500 text-black'}`}/>
             </div>
             <div className="w-1/4 ">
               <button onClick={addName} className='w-full py-2 lg:mt-10 mt-6  text-white font-body font-semibold bg-green-800 border-0 px-4 focus:outline-none hover:bg-green-900 rounded text-sm'>Ajouter nom</button>
             </div>
           </div>
-            <ul className='rounded-xl bg-white border border-gray-200 shadow dark:bg-gray-800 dark:border-gray-700 w-full mt-2 p-4 mx-auto  justify-center'>
+            <ul className={`rounded-xl border  shadow w-full mt-2 p-2 mx-auto  justify-center ${theme === 'dark' ? 'border-gray-200 ' : 'border-gray-700 bg-gray-300'}`}>
               {names.map((name, index) => (
-                <li key={name} className='flex py-2 px-4 mb-1 font-semibold items-center justify-between text-gray-200 font-body rounded-xl bg-white border border-gray-200 shadow dark:bg-gray-800 dark:border-gray-700'>
+                <li key={name} className={`flex py-2 px-4 mb-1 font-semibold items-center justify-between  font-body rounded-xl  border border-gray-200 shadow ${theme === 'dark' ? 'bg-gray-800 text-white' : ' text-gray-900'}`}>
                   {name}
                   <button onClick={() => removeName(index)} 
                     className='py-2 text-white font-body font-semibold bg-red-800 border-0 px-4 focus:outline-none hover:bg-red-900 rounded text-xs'>Supprimer</button>
@@ -376,14 +372,14 @@ function Planning() {
                 <table className="min-w-full rounded-lg overflow-hidden shadow-lg">
                   <thead>
                     <tr>
-                      <th className="px-6 py-5 bg-gray-400 text-left text-xs leading-4 font-medium text-gray-100 uppercase tracking-wider">Module</th>
-                      <th className="px-6 py-3 bg-gray-400 text-left text-xs leading-4 font-medium text-gray-100 uppercase tracking-wider">Horraire</th>
-                      <th className="px-6 py-3 bg-gray-400 text-left text-xs leading-4 font-medium text-gray-100 uppercase tracking-wider">Date</th>
-                      <th className="px-6 py-3 bg-gray-400 text-left text-xs leading-4 font-medium text-gray-100 uppercase tracking-wider">Enseignants</th>
-                      <th className="px-6 py-3 bg-gray-400 text-left text-xs leading-4 font-medium text-gray-100 uppercase tracking-wider">Lieu</th>
-                    </tr>
+                      <th className={`px-6 py-4  text-left text-xs leading-4 font-medium  uppercase tracking-wider ${theme === 'dark' ? 'bg-gray-700 text-gray-100' : 'bg-gray-400 text-gray-800 font-bold'}`}>Module</th>
+                      <th className={`px-6 py-3  text-left text-xs leading-4 font-medium  uppercase tracking-wider ${theme === 'dark' ? 'bg-gray-700 text-gray-100' : 'bg-gray-400 text-gray-800'}`} >Horraire</th>
+                      <th className={`px-6 py-3  text-left text-xs leading-4 font-medium  uppercase tracking-wider ${theme === 'dark' ? 'bg-gray-700 text-gray-100' : 'bg-gray-400 text-gray-800'}`} >Date</th>
+                      <th className={`px-6 py-3  text-left text-xs leading-4 font-medium  uppercase tracking-wider ${theme === 'dark' ? 'bg-gray-700 text-gray-100' : 'bg-gray-400 text-gray-800'}`} >Enseignants</th>
+                      <th className={`px-6 py-3  text-left text-xs leading-4 font-medium  uppercase tracking-wider ${theme === 'dark' ? 'bg-gray-700 text-gray-100' : 'bg-gray-400 text-gray-800'}`} >Lieu</th>
+                    </tr> 
                   </thead>
-                  <tbody className="bg-gray-200 divide-y divide-gray-200 text-gray-700">
+                  <tbody className={` divide-y  ${theme === 'dark' ? 'bg-gray-600 divide-gray-200 text-gray-200' : 'bg-gray-300 text-gray-700'}`}>
                     {exams.map((exam) => (
                       <tr key={exam._id}>
                         <td className="px-4 py-4 whitespace-no-wrap">{exam.name}</td>
@@ -394,7 +390,7 @@ function Planning() {
                             <span key={index} className="block">{prof.name}</span>
                           ))}
                         </td>
-                        <td className="px-2 py-4 whitespace-no-wrap">{exam.salle.num}</td>
+                        <td className="px-2 py-4 whitespace-no-wrap">{exam.salle.batiment} {exam.salle.type} {exam.salle.num}</td>
                       </tr>
                     ))}
                   </tbody>

@@ -1,4 +1,4 @@
-import React ,{ useState ,useEffect ,useMemo} from 'react'
+import React ,{ useState ,useEffect ,useContext} from 'react'
 
 import { Navbar } from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
@@ -9,9 +9,10 @@ import Spinner from "../components/Spinner";
 import Supprimer from '/assets/sup.png'
 import Modifier from '/assets/mod.png'
 import { Link } from 'react-router-dom';
-
-
+import { ThemeContext } from '../context/ThemeContext'
+import config from '../config/Config';
 function ListeSalles() {
+  const { theme } = useContext(ThemeContext);
   const [salles, setSalles] = useState([])
   const [loading, setLoading] = useState(false);
   const { user } = useAuthContext();
@@ -24,7 +25,7 @@ function ListeSalles() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get('https://eplan-backend.onrender.com/salles/all', {
+      .get(`${config.apiBaseUrl}/salles/all`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
@@ -60,7 +61,7 @@ function ListeSalles() {
   const handleDelete = (pID) => {
     setLoading(true);
     axios
-      .delete(`https://eplan-backend.onrender.com/salles/${pID}` , {
+      .delete(`${config.apiBaseUrl}/salles/${pID}` , {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
@@ -79,35 +80,35 @@ function ListeSalles() {
   };
 
   return (
-    <div className="text-white flex flex-col min-h-screen bg-gray-900">
+    <div className={`flex flex-col min-h-screen font-body text-white ${theme === 'dark' ? 'bg-gray-900 ' : 'bg-gray-200 '}`}>
       <Navbar />
       <Sidebar />
       <div className='flex items-center justify-around px-8 py-4'>
         <div></div>
         <div></div>
         <div></div>
-        <h1 className='sm:text-2xl text-2xl font-bold font-body text-white'>
+        <h1 className={`sm:text-xl text-2xl font-bold font-body  ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
           Liste des Locaux 🏢
         </h1>
         <div></div>
         <div>
-          <button onClick={handleHide} className='py-2 text-white font-body font-semibold  border-0  px-8 focus:outline-none hover:bg-indigo-600 rounded '>
+          <button onClick={handleHide} className={`py-2 font-body font-semibold  border-0  px-6 rounded ${theme === 'dark' ? 'focus:outline-none hover:bg-indigo-600 ' : 'bg-blue-800 focus:outline-none hover:bg-blue-600 '}`}>
             <img src={Filter} className='w-8 h-8' />
           </button>
         </div>
       </div>
           <div id="filter" className='font-body rounded-xl flex my-8 shadow  mx-auto  lg:col-span-8 lg:w-3/4 lg:mr-16 md:w-1/2 md:mt-4 justify-center '>
               <div className='mx-4'>
-                <label className='block mb-1 text-sm font-body text-gray-400'>Type du local</label>
-                <select onChange={(event) => setFilters({ ...filters, type: event.target.value })} className='w-full border border-none rounded-md px-4 py-2 mb-2 bg-gray-800 font-body'>
+                <label className={`block mb-1 text-sm font-body  ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Type du local</label>
+                <select onChange={(event) => setFilters({ ...filters, type: event.target.value })} className={`w-full bg-gray-100 text-gray-900 border border-none rounded-md px-12 py-2 mb-2 font-body ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-50'}`}>
                   <option value="">Select...</option> 
                   <option value="Salle TD">Salle TD</option>
                   <option value="Amphi">Amphi</option>
                 </select>
               </div>
               <div className='mx-4'>
-                <label className='block mb-1 text-sm font-body text-gray-400'>Capacité</label>
-                <select onChange={(event) => setFilters({ ...filters, capacite: event.target.value })} className='w-full border border-none rounded-md px-4 py-2 mb-2 bg-gray-800 font-body'>
+                <label className={`block mb-1 text-sm font-body  ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Capacité</label>
+                <select onChange={(event) => setFilters({ ...filters, capacite: event.target.value })} className={`w-full bg-gray-100 text-gray-900 border border-none rounded-md px-12 py-2 mb-2 font-body ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-50'}`}>
                   <option value="">Select...</option> 
                   <option value="32">32</option>
                   <option value="40">40</option>

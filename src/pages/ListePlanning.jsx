@@ -1,4 +1,4 @@
-import React ,{ useState ,useEffect ,useMemo} from 'react'
+import React ,{ useState ,useEffect ,useContext} from 'react'
 import { Navbar } from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import axios from 'axios'
@@ -8,9 +8,11 @@ import Spinner from '../components/Spinner'
 import Supprimer from '/assets/sup.png'
 import Modifier from '/assets/mod.png'
 import { Link } from 'react-router-dom';
-
+import { ThemeContext } from '../context/ThemeContext'
+import config from '../config/Config';
 
 function ListePlanning() {
+  const { theme } = useContext(ThemeContext);
   const [plannings, setPlannings] = useState([])
   const [planningsFiltered, setPlanningsFiltered] = useState([])
   const [loading, setLoading] = useState(false);
@@ -25,7 +27,7 @@ function ListePlanning() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get('https://eplan-backend.onrender.com/plannings/all', {
+      .get(`${config.apiBaseUrl}/plannings/all`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
@@ -58,7 +60,7 @@ function ListePlanning() {
   const handleDelete = (pID) => {
     setLoading(true);
     axios
-      .delete(`https://eplan-backend.onrender.com/plannings/${pID}` , {
+      .delete(`${config.apiBaseUrl}/plannings/${pID}` , {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
@@ -79,27 +81,27 @@ function ListePlanning() {
     setPlanningsFiltered(filterSchedules(plannings, filters))
   }
   return (
-    <div className="text-white flex flex-col min-h-screen bg-gray-900">
+    <div className={`flex flex-col min-h-screen font-body text-white ${theme === 'dark' ? 'bg-gray-900 ' : 'bg-gray-200 '}`}>
       <Navbar />
       <Sidebar />
       <div className='flex items-center justify-around px-8 py-4'>
         <div></div>
         <div></div>
         <div></div>
-        <h1 className='sm:text-2xl text-2xl font-bold font-body text-white'>
+        <h1 className={`sm:text-xl text-2xl font-bold font-body  ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
         Liste des Plannings 📅   
         </h1>
         <div></div>
         <div>
-          <button onClick={handleHide} className='py-2 text-white font-body font-semibold  border-0  px-8 focus:outline-none hover:bg-indigo-600 rounded '>
+          <button onClick={handleHide} className={`py-2 font-body font-semibold  border-0  px-6 rounded ${theme === 'dark' ? 'focus:outline-none hover:bg-indigo-600 ' : 'bg-blue-800 focus:outline-none hover:bg-blue-600 '}`}>
             <img src={Filter} className='w-8 h-8' />
           </button>
         </div>
       </div>
-          <div id="filter" className='font-body rounded-xl flex my-8 shadow  mx-auto  lg:col-span-8 lg:w-3/4 lg:mr-16 md:w-1/2 md:mt-4 justify-center '>
+          <div id="filter" className='font-body rounded-xl flex my-8 py-2 shadow  mx-auto  lg:col-span-8 lg:w-3/4 lg:mr-16 md:w-1/2 md:mt-4 justify-center '>
               <div className='mx-4'>
-                <label className='block mb-1 text-sm font-body text-gray-400'>Filiére </label>
-                <select onChange={(event) => setFilters({ ...filters, filiere: event.target.value })} className='w-full border border-none rounded-md px-4 py-2 mb-2 bg-gray-800 font-body'>
+                <label className={`block mb-1 text-sm font-body  ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Filiére </label>
+                <select onChange={(event) => setFilters({ ...filters, filiere: event.target.value })} className={`bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-50'}`}>
                   <option value="">Select...</option> 
                   <option value="Ingéniorat">Ingéniorat</option>
                   <option value="Informatique">Informatique</option>
@@ -114,8 +116,8 @@ function ListePlanning() {
                 </select>
               </div>
               <div className='mx-4'>
-                <label className='block mb-1 text-sm font-body text-gray-400'>Année</label>
-                <select onChange={(event) => setFilters({ ...filters, annee: event.target.value })} className='w-full border border-none rounded-md px-4 py-2 mb-2 bg-gray-800 font-body'>
+                <label className={`block mb-1 text-sm font-body  ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Année</label>
+                <select onChange={(event) => setFilters({ ...filters, annee: event.target.value })} className={`bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-50'}`}>
                   <option value="">Select...</option> 
                   <option value="L1">L1</option>
                   <option value="L2">L2</option>
@@ -125,16 +127,16 @@ function ListePlanning() {
                 </select>
               </div>
               <div className='mx-4'>
-                <label className='block mb-1 text-sm font-body text-gray-400'>Semestre</label>
-                <select onChange={(event) => setFilters({ ...filters, semestre: event.target.value })} className='w-full border border-none rounded-md px-2  py-2 mb-2 bg-gray-800 font-body'>
+                <label className={`block mb-1 text-sm font-body  ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Semestre</label>
+                <select onChange={(event) => setFilters({ ...filters, semestre: event.target.value })} className={`bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-50'}`}>
                   <option value="">Select...</option> 
                   <option value="1">1</option>
                   <option value="2">2</option>
                 </select>
               </div>
               <div className='mx-4'>
-                <label className='block mb-1 text-sm font-body text-gray-400'>Type</label>
-                <select onChange={(event) => setFilters({ ...filters, type: event.target.value })}  className='w-full border border-none rounded-md px-2  py-2 mb-2 bg-gray-800 font-body'>
+                <label className={`block mb-1 text-sm font-body  ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Type</label>
+                <select onChange={(event) => setFilters({ ...filters, type: event.target.value })}  className={`bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-50'}`}>
                   <option value="">Select...</option> 
                   <option value="Normal">Normal</option>
                   <option value="Rattrapage">Rattrapage</option>
@@ -142,7 +144,7 @@ function ListePlanning() {
                 </select>
               </div>
               <div className='mx-4'>
-                <button className='w-full border border-none rounded-md px-8 py-2 mt-5 bg-indigo-800 font-body' onClick={handleFilter}>Filtrer</button>
+                <button className={`w-full border border-none rounded-md px-8 py-2 mt-5 bg-indigo-800 font-body  ${theme === 'dark' ? 'text-gray-300' : 'text-gray-200'}`} onClick={handleFilter}>Filtrer</button>
               </div>
           </div>
       <div className=' mx-auto  lg:col-span-8 lg:w-3/4 lg:mr-12 md:mt-4 w-full md:w-2/3 p-4 flex flex-col items-center justify-center'>
